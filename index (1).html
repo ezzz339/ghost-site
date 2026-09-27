@@ -1,0 +1,2521 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghost — RAGE:MP</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(0,140,255,.18), transparent 30%),
+        radial-gradient(circle at 80% 80%, rgba(0,90,255,.12), transparent 30%),
+        #050914;
+    color: white;
+    overflow-x: hidden;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* AUTH */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.auth-box {
+    width: 420px;
+    max-width: 100%;
+    background: rgba(8,15,30,.92);
+    border: 1px solid rgba(0,145,255,.35);
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow:
+        0 0 35px rgba(0,110,255,.12),
+        inset 0 0 30px rgba(0,100,255,.03);
+    animation: appear .45s ease;
+}
+
+.logo {
+    text-align: center;
+    font-size: 42px;
+    font-weight: 900;
+    color: #149cff;
+    text-shadow: 0 0 25px rgba(0,145,255,.7);
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #8291a8;
+    margin-bottom: 30px;
+}
+
+.auth-title {
+    font-size: 22px;
+    margin-bottom: 18px;
+}
+
+.field {
+    margin-bottom: 15px;
+}
+
+.field label {
+    display: block;
+    color: #91a2bb;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+.field input,
+.field select {
+    width: 100%;
+    padding: 13px 14px;
+    border-radius: 10px;
+    border: 1px solid #1b3554;
+    outline: none;
+    background: #081222;
+    color: white;
+    transition: .2s;
+}
+
+.field input:focus,
+.field select:focus {
+    border-color: #159dff;
+    box-shadow: 0 0 12px rgba(0,145,255,.2);
+}
+
+.main-btn {
+    width: 100%;
+    padding: 13px;
+    border: 0;
+    border-radius: 10px;
+    background: linear-gradient(90deg,#087be5,#10a4ff);
+    color: white;
+    font-weight: bold;
+    margin-top: 5px;
+    transition: .2s;
+}
+
+.main-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(0,145,255,.35);
+}
+
+.switch {
+    text-align: center;
+    color: #75859d;
+    margin-top: 18px;
+    font-size: 14px;
+}
+
+.switch span {
+    color: #159dff;
+    cursor: pointer;
+}
+
+.error {
+    min-height: 18px;
+    color: #ff5d73;
+    font-size: 13px;
+    margin: 10px 0;
+}
+
+/* APP */
+
+.app {
+    min-height: 100vh;
+    display: flex;
+}
+
+.sidebar {
+    width: 245px;
+    min-height: 100vh;
+    background: rgba(5,11,23,.96);
+    border-right: 1px solid rgba(0,145,255,.18);
+    padding: 25px 15px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.side-logo {
+    text-align: center;
+    font-size: 29px;
+    font-weight: 900;
+    color: #149cff;
+    text-shadow: 0 0 18px rgba(0,145,255,.5);
+    margin-bottom: 35px;
+}
+
+.nav-btn {
+    width: 100%;
+    padding: 13px 15px;
+    margin-bottom: 7px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #8191a9;
+    border-radius: 10px;
+    text-align: left;
+    transition: .2s;
+}
+
+.nav-btn:hover {
+    background: rgba(0,130,255,.08);
+    color: white;
+}
+
+.nav-btn.active {
+    background: rgba(0,130,255,.13);
+    border-color: rgba(0,145,255,.22);
+    color: #22a5ff;
+}
+
+.logout {
+    position: absolute;
+    bottom: 20px;
+    left: 15px;
+    width: calc(100% - 30px);
+    color: #ff687b;
+}
+
+.content {
+    margin-left: 245px;
+    width: calc(100% - 245px);
+    padding: 35px;
+}
+
+.page {
+    display: none;
+    animation: appear .35s ease;
+}
+
+.page.active {
+    display: block;
+}
+
+.top {
+    margin-bottom: 25px;
+}
+
+.top h1 {
+    font-size: 30px;
+}
+
+.top p {
+    color: #74859d;
+    margin-top: 6px;
+}
+
+.card {
+    background: rgba(8,16,31,.8);
+    border: 1px solid rgba(0,145,255,.18);
+    border-radius: 15px;
+    padding: 22px;
+    margin-bottom: 18px;
+}
+
+.card-title {
+    font-size: 18px;
+    margin-bottom: 18px;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 14px;
+}
+
+.info {
+    background: #081222;
+    border: 1px solid #152c48;
+    border-radius: 11px;
+    padding: 16px;
+}
+
+.info small {
+    color: #71839d;
+    display: block;
+    margin-bottom: 7px;
+}
+
+.info strong {
+    font-size: 16px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 7px;
+    background: rgba(0,145,255,.13);
+    color: #1ca2ff;
+    font-size: 12px;
+}
+
+/* PRODUCTS */
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 15px;
+}
+
+.product {
+    background: #081222;
+    border: 1px solid #163150;
+    border-radius: 14px;
+    padding: 22px;
+    text-align: center;
+    transition: .25s;
+}
+
+.product:hover {
+    transform: translateY(-4px);
+    border-color: #159dff;
+    box-shadow: 0 0 22px rgba(0,145,255,.12);
+}
+
+.product h3 {
+    margin-bottom: 10px;
+}
+
+.price {
+    color: #22a5ff;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.product button {
+    width: 100%;
+    padding: 10px;
+    background: #0b83e8;
+    border: 0;
+    color: white;
+    border-radius: 9px;
+}
+
+/* ADMIN */
+
+.admin-users {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.user-row {
+    background: #081222;
+    border: 1px solid #152c48;
+    border-radius: 11px;
+    padding: 15px;
+}
+
+.user-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.user-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.small-btn {
+    border: 1px solid #19446d;
+    background: #0a1729;
+    color: #b9d8f7;
+    padding: 8px 10px;
+    border-radius: 7px;
+    font-size: 12px;
+}
+
+.small-btn:hover {
+    border-color: #159dff;
+}
+
+.danger {
+    color: #ff7180;
+}
+
+/* NOTIFY */
+
+#notifications {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notify {
+    min-width: 260px;
+    max-width: 350px;
+    padding: 14px 16px;
+    background: #081525;
+    border: 1px solid #17609a;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,100,255,.2);
+    animation: notifyIn .3s ease;
+}
+
+.media-status {
+    margin-top: 15px;
+    color: #8191a9;
+}
+
+.application {
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 9px;
+    background: #081222;
+    border: 1px solid #152c48;
+}
+
+.application.pending {
+    border-color: #d6a72a;
+}
+
+.application.approved {
+    border-color: #22d995;
+}
+
+.application.rejected {
+    border-color: #e74c5f;
+}
+
+/* MOBILE */
+
+@media(max-width:850px) {
+    .sidebar {
+        width: 190px;
+    }
+
+    .content {
+        margin-left: 190px;
+        width: calc(100% - 190px);
+        padding: 20px;
+    }
+
+    .products {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width:600px) {
+    .sidebar {
+        position: static;
+        width: 100%;
+        min-height: auto;
+    }
+
+    .app {
+        display: block;
+    }
+
+    .content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .logout {
+        position: static;
+        margin-top: 10px;
+    }
+
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes notifyIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="notifications"></div>
+
+<div id="authPage" class="auth-page">
+
+    <div class="auth-box">
+
+        <div class="logo">GHOST</div>
+        <div class="subtitle">RAGE:MP Project</div>
+
+        <div id="loginForm">
+
+            <div class="auth-title">Авторизация</div>
+
+            <div class="field">
+                <label>Логин</label>
+                <input id="loginUsername" type="text" autocomplete="username">
+            </div>
+
+            <div class="field">
+                <label>Пароль</label>
+                <input id="loginPassword" type="password" autocomplete="current-password">
+            </div>
+
+            <div id="loginError" class="error"></div>
+
+            <button class="main-btn" id="loginBtn">
+                Войти
+            </button>
+
+            <div class="switch">
+                Нет аккаунта?
+                <span id="showRegister">Регистрация</span>
+            </div>
+
+        </div>
+
+        <div id="registerForm" class="hidden">
+
+            <div class="auth-title">Регистрация</div>
+
+            <div class="field">
+                <label>Логин</label>
+                <input id="registerUsername" type="text" autocomplete="username">
+            </div>
+
+            <div class="field">
+                <label>Пароль</label>
+                <input id="registerPassword" type="password" autocomplete="new-password">
+            </div>
+
+            <div class="field">
+                <label>Повторите пароль</label>
+                <input id="registerPassword2" type="password" autocomplete="new-password">
+            </div>
+
+            <div id="registerError" class="error"></div>
+
+            <button class="main-btn" id="registerBtn">
+                Создать аккаунт
+            </button>
+
+            <div class="switch">
+                Уже есть аккаунт?
+                <span id="showLogin">Войти</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="app" class="app hidden">
+
+    <aside class="sidebar">
+
+        <div class="side-logo">GHOST</div>
+
+        <button class="nav-btn active" data-page="profilePage">
+            Профиль
+        </button>
+
+        <button class="nav-btn" data-page="keyPage">
+            Ключ
+        </button>
+
+        <button class="nav-btn" data-page="purchasePage">
+            Покупки
+        </button>
+
+        <button class="nav-btn" data-page="mediaPage">
+            Media
+        </button>
+
+        <button id="adminNav" class="nav-btn hidden" data-page="adminPage">
+            Руководство
+        </button>
+
+        <button id="logoutBtn" class="nav-btn logout">
+            Выйти
+        </button>
+
+    </aside>
+
+    <main class="content">
+
+        <section id="profilePage" class="page active">
+
+            <div class="top">
+                <h1 id="welcome"></h1>
+                <p>Ваш профиль Ghost</p>
+            </div>
+
+            <div class="card">
+
+                <div class="card-title">
+                    Информация
+                </div>
+
+                <div class="profile-grid">
+
+                    <div class="info">
+                        <small>Логин</small>
+                        <strong id="profileUsername"></strong>
+                    </div>
+
+                    <div class="info">
+                        <small>UID</small>
+                        <strong id="profileUid"></strong>
+                    </div>
+
+                    <div class="info">
+                        <small>Роль</small>
+                        <strong id="profileRole"></strong>
+                    </div>
+
+                    <div class="info">
+                        <small>Подписка</small>
+                        <strong id="profileSubscription"></strong>
+                    </div>
+
+                    <div class="info">
+                        <small>Игра</small>
+                        <strong>RAGE:MP</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section id="keyPage" class="page">
+
+            <div class="top">
+                <h1>Активация ключа</h1>
+                <p>Введите полученный ключ</p>
+            </div>
+
+            <div class="card">
+
+                <div class="field">
+                    <label>Ключ</label>
+                    <input id="keyInput" placeholder="GHOST-XXXXXX-XX">
+                </div>
+
+                <button class="main-btn" id="activateKeyBtn">
+                    Активировать
+                </button>
+
+            </div>
+
+        </section>
+
+        <section id="purchasePage" class="page">
+
+            <div class="top">
+                <h1>Покупка подписки</h1>
+                <p>Выберите срок подписки</p>
+            </div>
+
+            <div class="products">
+
+                <div class="product">
+                    <h3>7 дней</h3>
+                    <div class="price">200 ₽</div>
+                    <div style="color:#71839d;margin-bottom:15px;">
+                        105 ₴
+                    </div>
+                    <button onclick="buyDays(7)">
+                        Получить
+                    </button>
+                </div>
+
+                <div class="product">
+                    <h3>15 дней</h3>
+                    <div class="price">300 ₽</div>
+                    <div style="color:#71839d;margin-bottom:15px;">
+                        158 ₴
+                    </div>
+                    <button onclick="buyDays(15)">
+                        Получить
+                    </button>
+                </div>
+
+                <div class="product">
+                    <h3>30 дней</h3>
+                    <div class="price">500 ₽</div>
+                    <div style="color:#71839d;margin-bottom:15px;">
+                        264 ₴
+                    </div>
+                    <button onclick="buyDays(30)">
+                        Получить
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section id="mediaPage" class="page">
+
+            <div class="top">
+                <h1>Media</h1>
+                <p>Подача заявки на получение роли Media</p>
+            </div>
+
+            <div class="card">
+
+                <div class="card-title">
+                    Требования
+                </div>
+
+                <p style="color:#8494aa;line-height:1.6;">
+                    Нужно иметь минимум 3 видео на одной площадке
+                    — TikTok или YouTube — и каждое видео должно
+                    иметь 1000+ просмотров.
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <div class="field">
+                    <label>Площадка</label>
+
+                    <select id="mediaPlatform">
+                        <option value="TikTok">TikTok</option>
+                        <option value="YouTube">YouTube</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Ссылка на профиль</label>
+                    <input id="mediaProfile" placeholder="https://...">
+                </div>
+
+                <div class="field">
+                    <label>Видео №1</label>
+                    <input id="mediaVideo1" placeholder="https://...">
+                </div>
+
+                <div class="field">
+                    <label>Видео №2</label>
+                    <input id="mediaVideo2" placeholder="https://...">
+                </div>
+
+                <div class="field">
+                    <label>Видео №3</label>
+                    <input id="mediaVideo3" placeholder="https://...">
+                </div>
+
+                <button class="main-btn" id="mediaSubmit">
+                    Подать заявку
+                </button>
+
+                <div id="mediaStatus" class="media-status"></div>
+
+            </div>
+
+        </section>
+
+        <section id="adminPage" class="page">
+
+            <div class="top">
+                <h1>Руководство проекта</h1>
+                <p>Управление пользователями</p>
+            </div>
+
+            <div class="card">
+
+                <div class="field">
+                    <label>UID или логин</label>
+                    <input id="adminSearch" placeholder="Введите UID или логин">
+                </div>
+
+                <div class="user-actions">
+
+                    <button class="small-btn" onclick="adminGiveDays(7)">
+                        +7 дней
+                    </button>
+
+                    <button class="small-btn" onclick="adminGiveDays(15)">
+                        +15 дней
+                    </button>
+
+                    <button class="small-btn" onclick="adminGiveDays(30)">
+                        +30 дней
+                    </button>
+
+                    <button class="small-btn danger" onclick="adminTakeDays()">
+                        Забрать подписку
+                    </button>
+
+                    <button class="small-btn" onclick="adminGiveMedia()">
+                        Выдать Media
+                    </button>
+
+                    <button class="small-btn" onclick="adminGiveAdmin()">
+                        Выдать руководство
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <div class="card-title">
+                    Пользователи
+                </div>
+
+                <div id="usersList" class="admin-users"></div>
+
+            </div>
+
+            <div class="card">
+
+                <div class="card-title">
+                    Заявки Media
+                </div>
+
+                <div id="applicationsList"></div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script>
+
+function safeLoad(key, fallback) {
+
+    try {
+
+        const value = localStorage.getItem(key);
+
+        if (!value) {
+            return fallback;
+        }
+
+        const parsed = JSON.parse(value);
+
+        if (Array.isArray(fallback) && !Array.isArray(parsed)) {
+            localStorage.removeItem(key);
+            return fallback;
+        }
+
+        return parsed;
+
+    } catch (error) {
+
+        localStorage.removeItem(key);
+
+        return fallback;
+    }
+}
+
+
+let users = safeLoad("ghost_users", []);
+let usedKeys = safeLoad("ghost_used_keys", []);
+let applications = safeLoad("ghost_media_applications", []);
+
+let currentUserUid = null;
+
+try {
+    currentUserUid =
+        localStorage.getItem("ghost_current_uid");
+} catch (e) {
+    currentUserUid = null;
+}
+
+
+function saveData() {
+
+    try {
+
+        localStorage.setItem(
+            "ghost_users",
+            JSON.stringify(users)
+        );
+
+        localStorage.setItem(
+            "ghost_used_keys",
+            JSON.stringify(usedKeys)
+        );
+
+        localStorage.setItem(
+            "ghost_media_applications",
+            JSON.stringify(applications)
+        );
+
+        if (currentUserUid !== null) {
+
+            localStorage.setItem(
+                "ghost_current_uid",
+                String(currentUserUid)
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Ошибка сохранения:",
+            error
+        );
+    }
+}
+
+
+function generateUID() {
+
+    let uid;
+
+    do {
+
+        uid = Math.floor(
+            10000000 +
+            Math.random() * 90000000
+        ).toString();
+
+    } while (
+        users.some(
+            user =>
+                String(user.uid) === uid
+        )
+    );
+
+    return uid;
+}
+
+
+function getCurrentUser() {
+
+    if (!currentUserUid) {
+        return null;
+    }
+
+    return users.find(
+        user =>
+            String(user.uid) ===
+            String(currentUserUid)
+    ) || null;
+}
+
+
+function normalize(value) {
+
+    return String(value || "").trim();
+}
+
+
+function notify(message, error = false) {
+
+    const box =
+        document.createElement("div");
+
+    box.className = "notify";
+
+    if (error) {
+        box.style.borderColor =
+            "#e74c5f";
+    }
+
+    box.textContent = message;
+
+    document
+        .getElementById("notifications")
+        .appendChild(box);
+
+    setTimeout(
+        () => box.remove(),
+        3000
+    );
+}
+
+
+/* AUTH SWITCH */
+
+document
+    .getElementById("showRegister")
+    .addEventListener("click", () => {
+
+        document
+            .getElementById("loginForm")
+            .classList.add("hidden");
+
+        document
+            .getElementById("registerForm")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("loginError")
+            .textContent = "";
+
+        document
+            .getElementById("registerError")
+            .textContent = "";
+
+    });
+
+
+document
+    .getElementById("showLogin")
+    .addEventListener("click", () => {
+
+        document
+            .getElementById("registerForm")
+            .classList.add("hidden");
+
+        document
+            .getElementById("loginForm")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("loginError")
+            .textContent = "";
+
+        document
+            .getElementById("registerError")
+            .textContent = "";
+
+    });
+
+
+/* REGISTER */
+
+document
+    .getElementById("registerBtn")
+    .addEventListener(
+        "click",
+        register
+    );
+
+
+function register() {
+
+    const username =
+        normalize(
+            document
+                .getElementById("registerUsername")
+                .value
+        );
+
+    const password =
+        document
+            .getElementById("registerPassword")
+            .value;
+
+    const password2 =
+        document
+            .getElementById("registerPassword2")
+            .value;
+
+    const error =
+        document
+            .getElementById("registerError");
+
+    error.textContent = "";
+
+    if (!username) {
+
+        error.textContent =
+            "Введите логин";
+
+        return;
+    }
+
+    if (username.length < 3) {
+
+        error.textContent =
+            "Логин должен быть минимум 3 символа";
+
+        return;
+    }
+
+    if (!password) {
+
+        error.textContent =
+            "Введите пароль";
+
+        return;
+    }
+
+    if (password.length < 4) {
+
+        error.textContent =
+            "Пароль должен быть минимум 4 символа";
+
+        return;
+    }
+
+    if (password !== password2) {
+
+        error.textContent =
+            "Пароли не совпадают";
+
+        return;
+    }
+
+    const exists =
+        users.some(
+            user =>
+                String(user.username)
+                    .toLowerCase() ===
+                username.toLowerCase()
+        );
+
+    if (exists) {
+
+        error.textContent =
+            "Такой логин уже зарегистрирован";
+
+        return;
+    }
+
+    const newUser = {
+
+        uid: generateUID(),
+
+        username: username,
+
+        password: password,
+
+        role: "Пользователь",
+
+        subscriptionDays: 0,
+
+        mediaApplication: "Не подано",
+
+        createdAt: Date.now()
+
+    };
+
+    users.push(newUser);
+
+    currentUserUid =
+        newUser.uid;
+
+    saveData();
+
+    notify(
+        "Аккаунт успешно создан"
+    );
+
+    openApp();
+}
+
+
+/* LOGIN */
+
+document
+    .getElementById("loginBtn")
+    .addEventListener(
+        "click",
+        login
+    );
+
+
+function login() {
+
+    const username =
+        normalize(
+            document
+                .getElementById("loginUsername")
+                .value
+        );
+
+    const password =
+        document
+            .getElementById("loginPassword")
+            .value;
+
+    const error =
+        document
+            .getElementById("loginError");
+
+    error.textContent = "";
+
+    if (!username || !password) {
+
+        error.textContent =
+            "Введите логин и пароль";
+
+        return;
+    }
+
+    const user =
+        users.find(
+            item =>
+                String(item.username)
+                    .toLowerCase() ===
+                username.toLowerCase() &&
+                item.password === password
+        );
+
+    if (!user) {
+
+        error.textContent =
+            "Неверный логин или пароль";
+
+        return;
+    }
+
+    currentUserUid =
+        user.uid;
+
+    saveData();
+
+    notify(
+        "Вы успешно вошли"
+    );
+
+    openApp();
+}
+
+
+/* APP */
+
+function openApp() {
+
+    const user =
+        getCurrentUser();
+
+    if (!user) {
+
+        showAuth();
+
+        return;
+    }
+
+    document
+        .getElementById("authPage")
+        .classList.add("hidden");
+
+    document
+        .getElementById("app")
+        .classList.remove("hidden");
+
+    updateProfile();
+
+    updateAdminVisibility();
+
+    renderMediaStatus();
+
+    renderAdmin();
+}
+
+
+function showAuth() {
+
+    document
+        .getElementById("app")
+        .classList.add("hidden");
+
+    document
+        .getElementById("authPage")
+        .classList.remove("hidden");
+}
+
+
+/* LOGOUT */
+
+document
+    .getElementById("logoutBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            currentUserUid = null;
+
+            try {
+
+                localStorage.removeItem(
+                    "ghost_current_uid"
+                );
+
+            } catch (e) {}
+
+            showAuth();
+
+            document
+                .getElementById("loginPassword")
+                .value = "";
+
+            notify(
+                "Вы вышли из аккаунта"
+            );
+        }
+    );
+
+
+/* NAVIGATION */
+
+document
+    .querySelectorAll(".nav-btn[data-page]")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                const pageId =
+                    button.dataset.page;
+
+                document
+                    .querySelectorAll(".page")
+                    .forEach(page => {
+
+                        page.classList.remove(
+                            "active"
+                        );
+
+                    });
+
+                const target =
+                    document.getElementById(
+                        pageId
+                    );
+
+                if (!target) {
+                    return;
+                }
+
+                target.classList.add(
+                    "active"
+                );
+
+                document
+                    .querySelectorAll(
+                        ".nav-btn[data-page]"
+                    )
+                    .forEach(btn => {
+
+                        btn.classList.remove(
+                            "active"
+                        );
+
+                    });
+
+                button.classList.add(
+                    "active"
+                );
+
+                if (
+                    pageId === "adminPage"
+                ) {
+                    renderAdmin();
+                }
+
+            }
+        );
+
+    });
+
+
+/* PROFILE */
+
+function updateProfile() {
+
+    const user =
+        getCurrentUser();
+
+    if (!user) {
+        return;
+    }
+
+    document
+        .getElementById("welcome")
+        .textContent =
+        "Привет, " +
+        user.username +
+        "!";
+
+    document
+        .getElementById("profileUsername")
+        .textContent =
+        user.username;
+
+    document
+        .getElementById("profileUid")
+        .textContent =
+        user.uid;
+
+    document
+        .getElementById("profileRole")
+        .textContent =
+        user.role;
+
+    document
+        .getElementById("profileSubscription")
+        .textContent =
+        user.subscriptionDays > 0
+            ? user.subscriptionDays + " дней"
+            : "Нет подписки";
+}
+
+
+/* ADMIN VISIBILITY */
+
+function updateAdminVisibility() {
+
+    const user =
+        getCurrentUser();
+
+    const adminNav =
+        document.getElementById(
+            "adminNav"
+        );
+
+    if (
+        user &&
+        user.role ===
+        "Руководство проекта"
+    ) {
+
+        adminNav.classList.remove(
+            "hidden"
+        );
+
+    } else {
+
+        adminNav.classList.add(
+            "hidden"
+        );
+
+    }
+}
+
+
+/* KEYS */
+
+document
+    .getElementById("activateKeyBtn")
+    .addEventListener(
+        "click",
+        activateKey
+    );
+
+
+const ADMIN_KEYS = [
+    "GHOST-ADMIN-7K4P-01",
+    "GHOST-ADMIN-9X2M-02",
+    "GHOST-ADMIN-5Q8L-03",
+    "GHOST-ADMIN-3N7R-04",
+    "GHOST-ADMIN-8V1C-05"
+];
+
+
+const MEDIA_KEYS = [
+    "GHOST-MEDIA-4F8N-01",
+    "GHOST-MEDIA-7P2Q-02",
+    "GHOST-MEDIA-9L5R-03",
+    "GHOST-MEDIA-6T1W-04",
+    "GHOST-MEDIA-3X8K-05"
+];
+
+
+const SUB_KEYS = [
+    "GHOST-AX71K-01",
+    "GHOST-BQ82L-02",
+    "GHOST-CR93M-03",
+    "GHOST-DT14N-04",
+    "GHOST-EU25P-05",
+    "GHOST-FV36Q-06",
+    "GHOST-GW47R-07",
+    "GHOST-HX58S-08",
+    "GHOST-JY69T-09",
+    "GHOST-KZ70U-10",
+    "GHOST-LA81V-11",
+    "GHOST-MB92W-12",
+    "GHOST-NC13X-13",
+    "GHOST-OD24Y-14",
+    "GHOST-PE35Z-15",
+    "GHOST-QF46A-16",
+    "GHOST-RG57B-17",
+    "GHOST-SH68C-18",
+    "GHOST-TJ79D-19",
+    "GHOST-UK80E-20"
+];
+
+
+function activateKey() {
+
+    const input =
+        document.getElementById(
+            "keyInput"
+        );
+
+    const key =
+        normalize(
+            input.value
+        ).toUpperCase();
+
+    const user =
+        getCurrentUser();
+
+    if (!user) {
+        return;
+    }
+
+    if (!key) {
+
+        notify(
+            "Введите ключ",
+            true
+        );
+
+        return;
+    }
+
+    if (
+        usedKeys.includes(key)
+    ) {
+
+        notify(
+            "Этот ключ уже использован",
+            true
+        );
+
+        return;
+    }
+
+
+    if (
+        ADMIN_KEYS.includes(key)
+    ) {
+
+        user.role =
+            "Руководство проекта";
+
+        usedKeys.push(key);
+
+        saveData();
+
+        input.value = "";
+
+        updateProfile();
+
+        updateAdminVisibility();
+
+        notify(
+            "Вы получили роль Руководство проекта"
+        );
+
+        return;
+    }
+
+
+    if (
+        MEDIA_KEYS.includes(key)
+    ) {
+
+        user.role =
+            "Media";
+
+        usedKeys.push(key);
+
+        saveData();
+
+        input.value = "";
+
+        updateProfile();
+
+        notify(
+            "Вы получили роль Media"
+        );
+
+        return;
+    }
+
+
+    if (
+        SUB_KEYS.includes(key)
+    ) {
+
+        const number =
+            parseInt(
+                key.split("-").pop()
+            );
+
+        let days = 0;
+
+        if (
+            number >= 1 &&
+            number <= 7
+        ) {
+            days = 7;
+        }
+
+        else if (
+            number >= 8 &&
+            number <= 15
+        ) {
+            days = 15;
+        }
+
+        else if (
+            number >= 16 &&
+            number <= 20
+        ) {
+            days = 30;
+        }
+
+        user.subscriptionDays +=
+            days;
+
+        usedKeys.push(key);
+
+        saveData();
+
+        input.value = "";
+
+        updateProfile();
+
+        notify(
+            "Подписка активирована на " +
+            days +
+            " дней"
+        );
+
+        return;
+    }
+
+
+    notify(
+        "Неверный ключ",
+        true
+    );
+}
+
+
+/* PURCHASE */
+
+function buyDays(days) {
+
+    const user =
+        getCurrentUser();
+
+    if (!user) {
+        return;
+    }
+
+    user.subscriptionDays +=
+        days;
+
+    saveData();
+
+    updateProfile();
+
+    notify(
+        "Добавлено " +
+        days +
+        " дней"
+    );
+}
+
+
+/* MEDIA */
+
+document
+    .getElementById("mediaSubmit")
+    .addEventListener(
+        "click",
+        submitMediaApplication
+    );
+
+
+function submitMediaApplication() {
+
+    const user =
+        getCurrentUser();
+
+    if (!user) {
+        return;
+    }
+
+    const platform =
+        document
+            .getElementById(
+                "mediaPlatform"
+            )
+            .value;
+
+    const profile =
+        normalize(
+            document
+                .getElementById(
+                    "mediaProfile"
+                )
+                .value
+        );
+
+    const video1 =
+        normalize(
+            document
+                .getElementById(
+                    "mediaVideo1"
+                )
+                .value
+        );
+
+    const video2 =
+        normalize(
+            document
+                .getElementById(
+                    "mediaVideo2"
+                )
+                .value
+        );
+
+    const video3 =
+        normalize(
+            document
+                .getElementById(
+                    "mediaVideo3"
+                )
+                .value
+        );
+
+
+    if (
+        !profile ||
+        !video1 ||
+        !video2 ||
+        !video3
+    ) {
+
+        notify(
+            "Заполните все поля заявки",
+            true
+        );
+
+        return;
+    }
+
+
+    const pending =
+        applications.find(
+            app =>
+                String(app.uid) ===
+                String(user.uid) &&
+                app.status ===
+                "На рассмотрении"
+        );
+
+
+    if (pending) {
+
+        notify(
+            "У вас уже есть заявка на рассмотрении",
+            true
+        );
+
+        return;
+    }
+
+
+    const application = {
+
+        id: Date.now(),
+
+        uid: user.uid,
+
+        username: user.username,
+
+        platform: platform,
+
+        profile: profile,
+
+        videos: [
+            video1,
+            video2,
+            video3
+        ],
+
+        status: "На рассмотрении",
+
+        createdAt: Date.now()
+
+    };
+
+
+    applications.push(
+        application
+    );
+
+    user.mediaApplication =
+        "На рассмотрении";
+
+    saveData();
+
+    renderMediaStatus();
+
+    notify(
+        "Заявка отправлена на рассмотрение"
+    );
+}
+
+
+function renderMediaStatus() {
+
+    const user =
+        getCurrentUser();
+
+    if (!user) {
+        return;
+    }
+
+    const status =
+        document.getElementById(
+            "mediaStatus"
+        );
+
+    if (!status) {
+        return;
+    }
+
+    const app =
+        applications
+            .filter(
+                item =>
+                    String(item.uid) ===
+                    String(user.uid)
+            )
+            .sort(
+                (a,b) =>
+                    b.createdAt -
+                    a.createdAt
+            )[0];
+
+
+    if (!app) {
+
+        status.textContent =
+            "Статус заявки: Не подано";
+
+        return;
+    }
+
+    status.textContent =
+        "Статус заявки: " +
+        app.status;
+}
+
+
+/* ADMIN */
+
+function isAdmin() {
+
+    const user =
+        getCurrentUser();
+
+    return (
+        user &&
+        user.role ===
+        "Руководство проекта"
+    );
+}
+
+
+function findAdminUser() {
+
+    if (!isAdmin()) {
+
+        notify(
+            "Нет доступа",
+            true
+        );
+
+        return null;
+    }
+
+    const query =
+        normalize(
+            document
+                .getElementById(
+                    "adminSearch"
+                )
+                .value
+        );
+
+    if (!query) {
+
+        notify(
+            "Введите UID или логин",
+            true
+        );
+
+        return null;
+    }
+
+
+    return users.find(
+        user =>
+            String(user.uid) ===
+            query ||
+            String(user.username)
+                .toLowerCase() ===
+            query.toLowerCase()
+    ) || null;
+}
+
+
+function adminGiveDays(days) {
+
+    const user =
+        findAdminUser();
+
+    if (!user) {
+
+        notify(
+            "Пользователь не найден",
+            true
+        );
+
+        return;
+    }
+
+    user.subscriptionDays +=
+        days;
+
+    saveData();
+
+    renderAdmin();
+
+    if (
+        String(user.uid) ===
+        String(currentUserUid)
+    ) {
+        updateProfile();
+    }
+
+    notify(
+        user.username +
+        ": +" +
+        days +
+        " дней"
+    );
+}
+
+
+function adminTakeDays() {
+
+    const user =
+        findAdminUser();
+
+    if (!user) {
+
+        notify(
+            "Пользователь не найден",
+            true
+        );
+
+        return;
+    }
+
+    user.subscriptionDays = 0;
+
+    saveData();
+
+    renderAdmin();
+
+    if (
+        String(user.uid) ===
+        String(currentUserUid)
+    ) {
+        updateProfile();
+    }
+
+    notify(
+        user.username +
+        ": подписка забрана"
+    );
+}
+
+
+function adminGiveMedia() {
+
+    const user =
+        findAdminUser();
+
+    if (!user) {
+
+        notify(
+            "Пользователь не найден",
+            true
+        );
+
+        return;
+    }
+
+    user.role =
+        "Media";
+
+    saveData();
+
+    renderAdmin();
+
+    if (
+        String(user.uid) ===
+        String(currentUserUid)
+    ) {
+
+        updateProfile();
+
+        updateAdminVisibility();
+    }
+
+    notify(
+        user.username +
+        ": выдана роль Media"
+    );
+}
+
+
+function adminGiveAdmin() {
+
+    const user =
+        findAdminUser();
+
+    if (!user) {
+
+        notify(
+            "Пользователь не найден",
+            true
+        );
+
+        return;
+    }
+
+    user.role =
+        "Руководство проекта";
+
+    saveData();
+
+    renderAdmin();
+
+    if (
+        String(user.uid) ===
+        String(currentUserUid)
+    ) {
+
+        updateProfile();
+
+        updateAdminVisibility();
+    }
+
+    notify(
+        user.username +
+        ": выдана роль Руководство проекта"
+    );
+}
+
+
+/* ADMIN RENDER */
+
+function renderAdmin() {
+
+    if (!isAdmin()) {
+        return;
+    }
+
+    const usersList =
+        document.getElementById(
+            "usersList"
+        );
+
+    usersList.innerHTML = "";
+
+
+    users.forEach(user => {
+
+        const row =
+            document.createElement(
+                "div"
+            );
+
+        row.className =
+            "user-row";
+
+        row.innerHTML = `
+
+            <div class="user-head">
+
+                <div>
+
+                    <strong>
+                        ${escapeHTML(user.username)}
+                    </strong>
+
+                    <div style="
+                        color:#71839d;
+                        font-size:12px;
+                        margin-top:5px;
+                    ">
+                        UID:
+                        ${escapeHTML(user.uid)}
+                    </div>
+
+                </div>
+
+                <span class="badge">
+                    ${escapeHTML(user.role)}
+                </span>
+
+            </div>
+
+            <div style="
+                color:#71839d;
+                font-size:13px;
+            ">
+                Подписка:
+                ${user.subscriptionDays}
+                дней
+            </div>
+
+        `;
+
+        usersList.appendChild(
+            row
+        );
+
+    });
+
+
+    renderApplications();
+}
+
+
+function renderApplications() {
+
+    const list =
+        document.getElementById(
+            "applicationsList"
+        );
+
+    list.innerHTML = "";
+
+
+    if (!applications.length) {
+
+        list.innerHTML =
+            '<div style="color:#71839d;">Заявок нет</div>';
+
+        return;
+    }
+
+
+    applications
+        .slice()
+        .reverse()
+        .forEach(app => {
+
+            const box =
+                document.createElement(
+                    "div"
+                );
+
+            box.className =
+                "application";
+
+
+            if (
+                app.status ===
+                "На рассмотрении"
+            ) {
+                box.classList.add(
+                    "pending"
+                );
+            }
+
+            else if (
+                app.status ===
+                "Одобрено"
+            ) {
+                box.classList.add(
+                    "approved"
+                );
+            }
+
+            else {
+                box.classList.add(
+                    "rejected"
+                );
+            }
+
+
+            box.innerHTML = `
+
+                <strong>
+                    ${escapeHTML(app.username)}
+                </strong>
+
+                <div style="
+                    color:#71839d;
+                    margin-top:5px;
+                    font-size:13px;
+                ">
+                    UID:
+                    ${escapeHTML(app.uid)}
+                </div>
+
+                <div style="
+                    color:#71839d;
+                    margin-top:5px;
+                    font-size:13px;
+                ">
+                    Площадка:
+                    ${escapeHTML(app.platform)}
+                </div>
+
+                <div style="
+                    margin-top:8px;
+                    font-size:13px;
+                    word-break:break-all;
+                ">
+                    Профиль:<br>
+                    ${escapeHTML(app.profile)}
+                </div>
+
+                <div style="
+                    margin-top:8px;
+                    font-size:13px;
+                    word-break:break-all;
+                ">
+                    Видео:<br>
+                    ${app.videos
+                        .map(
+                            v =>
+                                escapeHTML(v)
+                        )
+                        .join("<br>")
+                    }
+                </div>
+
+                <div style="
+                    margin-top:10px;
+                    color:#9caec5;
+                ">
+                    Статус:
+                    ${escapeHTML(app.status)}
+                </div>
+
+            `;
+
+
+            if (
+                app.status ===
+                "На рассмотрении"
+            ) {
+
+                const actions =
+                    document.createElement(
+                        "div"
+                    );
+
+                actions.className =
+                    "user-actions";
+
+                actions.style.marginTop =
+                    "12px";
+
+
+                const approve =
+                    document.createElement(
+                        "button"
+                    );
+
+                approve.className =
+                    "small-btn";
+
+                approve.textContent =
+                    "Одобрить";
+
+                approve.onclick =
+                    () =>
+                        approveApplication(
+                            app.id
+                        );
+
+
+                const reject =
+                    document.createElement(
+                        "button"
+                    );
+
+                reject.className =
+                    "small-btn danger";
+
+                reject.textContent =
+                    "Отклонить";
+
+                reject.onclick =
+                    () =>
+                        rejectApplication(
+                            app.id
+                        );
+
+
+                actions.appendChild(
+                    approve
+                );
+
+                actions.appendChild(
+                    reject
+                );
+
+                box.appendChild(
+                    actions
+                );
+            }
+
+
+            list.appendChild(
+                box
+            );
+
+        });
+}
+
+
+function approveApplication(id) {
+
+    if (!isAdmin()) {
+        return;
+    }
+
+    const app =
+        applications.find(
+            item =>
+                item.id === id
+        );
+
+    if (!app) {
+        return;
+    }
+
+    app.status =
+        "Одобрено";
+
+    const user =
+        users.find(
+            item =>
+                String(item.uid) ===
+                String(app.uid)
+        );
+
+    if (user) {
+
+        user.role =
+            "Media";
+
+        user.mediaApplication =
+            "Одобрено";
+    }
+
+    saveData();
+
+    renderAdmin();
+
+    if (
+        user &&
+        String(user.uid) ===
+        String(currentUserUid)
+    ) {
+
+        updateProfile();
+
+        renderMediaStatus();
+    }
+
+    notify(
+        "Заявка одобрена"
+    );
+}
+
+
+function rejectApplication(id) {
+
+    if (!isAdmin()) {
+        return;
+    }
+
+    const app =
+        applications.find(
+            item =>
+                item.id === id
+        );
+
+    if (!app) {
+        return;
+    }
+
+    app.status =
+        "Отклонено";
+
+    const user =
+        users.find(
+            item =>
+                String(item.uid) ===
+                String(app.uid)
+        );
+
+    if (user) {
+
+        user.mediaApplication =
+            "Отклонено";
+    }
+
+    saveData();
+
+    renderAdmin();
+
+    if (
+        user &&
+        String(user.uid) ===
+        String(currentUserUid)
+    ) {
+
+        renderMediaStatus();
+    }
+
+    notify(
+        "Заявка отклонена"
+    );
+}
+
+
+/* ESCAPE */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+/* ENTER */
+
+document
+    .getElementById("loginPassword")
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                login();
+            }
+
+        }
+    );
+
+
+document
+    .getElementById("registerPassword2")
+    .addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+                register();
+            }
+
+        }
+    );
+
+
+/* AUTO LOGIN */
+
+if (currentUserUid) {
+
+    const user =
+        users.find(
+            item =>
+                String(item.uid) ===
+                String(currentUserUid)
+        );
+
+    if (user) {
+
+        openApp();
+
+    } else {
+
+        currentUserUid = null;
+
+        try {
+
+            localStorage.removeItem(
+                "ghost_current_uid"
+            );
+
+        } catch (e) {}
+
+    }
+}
+
+</script>
+
+</body>
+</html>
